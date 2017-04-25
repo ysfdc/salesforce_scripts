@@ -4,6 +4,7 @@ import logging
 import argparse
 import os
 import sys
+import codecs
 
 ACCOUNT_TO_FILE_CSV = './acc2files.csv'
 
@@ -72,7 +73,7 @@ def download_attachments(args):
 		logging.debug("Account ID: %s", record.get('ParentId'))
 		acc_to_file.append((record.get('ParentId'), local_file))
 
-	with open(ACCOUNT_TO_FILE_CSV, 'wb') as csv_file:
+	with codecs.open(ACCOUNT_TO_FILE_CSV, 'wb', 'utf-16') as csv_file:
 		csv_file.write('AccountId,FileName\n')
 		csv_file.write('\n'.join('"%s","%s"' % l for l in acc_to_file))
 
