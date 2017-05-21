@@ -6,7 +6,7 @@ import os
 import sys
 import codecs
 
-ACCOUNT_TO_FILE_CSV = './acc2files.csv'
+ACCOUNT_TO_FILE_CSV = './attachments.csv'
 
 def download_attachments(args):
 	session = requests.Session()
@@ -74,7 +74,7 @@ def download_attachments(args):
 		acc_to_file.append((record.get('ParentId'), local_file))
 
 	with codecs.open(ACCOUNT_TO_FILE_CSV, 'wb', 'utf-16') as csv_file:
-		csv_file.write('AccountId,FileName\n')
+		csv_file.write('ParentId,FileName\n')
 		csv_file.write('\n'.join('"%s","%s"' % l for l in acc_to_file))
 
 if __name__ == "__main__":
