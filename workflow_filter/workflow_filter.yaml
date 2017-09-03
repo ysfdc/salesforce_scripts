@@ -1,0 +1,3 @@
+object_name: Account
+trigger_type: onCreateOrTriggeringUpdate
+action_type: Alert
