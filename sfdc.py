@@ -111,3 +111,14 @@ class SFDC(object):
 				print "[EXCEPTION]: %s" % str(e)
 			return None
 		return resp
+
+	def run_soql(self, q):
+		""" Runs a SOQL query """
+		try:
+			result = self._sf.query(q)
+		except Exception, e:
+			print "[ERROR]: run_soql failed"
+			if DEBUG:
+				print "[EXCEPTION]: %s" % str(e)
+			return None
+		return result
