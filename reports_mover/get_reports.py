@@ -1,4 +1,4 @@
-import sys
+import codecs
 import sfdc
 
 MAIN_MENU_TEXT="""
@@ -15,6 +15,10 @@ SEARCH_BY_NOT_RUN = 2
 SEARCH_BY_RUN = 3
 RESULTS_OUTPUT_FILE = 'reports.txt'
 REPORT_IDS_OUTPUT_FILE = 'report_ids.txt'
+
+def save_to_file(filename, lines):
+	with codecs.open(filename, 'wb', 'utf-16') as output_file:
+		output_file.write('\r\n'.join(lines))
 
 def dump_reports(soql):
 	""" Dumps Salesforce report details given a SOQL """
@@ -38,10 +42,8 @@ def dump_reports(soql):
 		lines.append(line)
 		report_ids.append(record.get('Id'))
 
-	with open(RESULTS_OUTPUT_FILE, 'wb') as full_results_file:
-		full_results_file.write('\r\n'.join(lines))
-	with open(REPORT_IDS_OUTPUT_FILE, 'wb') as report_ids_file:
-		report_ids_file.write('\r\n'.join(report_ids))
+	save_to_file(RESULTS_OUTPUT_FILE, lines)
+	save_to_file(REPORT_IDS_OUTPUT_FILE, report_ids)
 	print ("[INFO]: Full results: %s, Report IDs: %s"
 		   % (RESULTS_OUTPUT_FILE, REPORT_IDS_OUTPUT_FILE))
 	return True
