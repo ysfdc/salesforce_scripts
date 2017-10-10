@@ -127,7 +127,7 @@ class SFDC(object):
 			print "[ERROR]: Update Analytics API failed"
 			log_exception(e)
 			return None
-		return resp
+		return resp.status_code
 
 	def run_soql(self, q):
 		""" Runs a SOQL query """

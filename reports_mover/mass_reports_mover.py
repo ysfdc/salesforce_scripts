@@ -13,7 +13,7 @@ def move_reports(input_file, folder_name):
 	results = sf.run_soql(soql)
 	# We only expect one result as folder name is unique
 	if not results or results.get('totalSize', -1) != 1:
-		print "[ERROR]: Cannot folder %s" % folder_name
+		print "[ERROR]: Cannot find folder %s" % folder_name
 		return False
 
 	record = results.get('records')[0]
@@ -29,7 +29,8 @@ def move_reports(input_file, folder_name):
 			"folderId": folder_id
 		}})
 	for report_id in report_ids:
-		sf.update_analytics_api(report_id, params)
+		if 200 != sf.update_analytics_api(report_id, params):
+			print "[FAILED]: Report %s" % report_id
 
 if __name__ == "__main__":
 	cli_parser = argparse.ArgumentParser(description="Mass Reports Mover")
@@ -46,5 +47,5 @@ if __name__ == "__main__":
 	if any(v is None for v in vars(args).values()):
 		cli_parser.print_help()
 		sys.exit(1)
-		
+
 	move_reports(args.input_file, args.folder)
