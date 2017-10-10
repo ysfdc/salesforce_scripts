@@ -8,6 +8,10 @@ DEBUG = True
 SFDC_BASE_URL = "https://{0}.salesforce.com"
 SFDC_SERVICE_URL = "https://{0}.salesforce.com/services/data/v{1}"
 
+def log_exception(ex_msg):
+	if DEBUG:
+		print "[EXCEPTION]: %s" % str(e)
+
 class SFDC(object):
 	def __init__(self, config_path):
 		self.connected = False
@@ -92,8 +96,7 @@ class SFDC(object):
 			return j_resp
 		except Exception, e:
 			print "[ERROR]: Tooling API response not JSON"
-			if DEBUG:
-				print "[EXCEPTION]: %s" % str(e)
+			log_exception(e)
 			return None
 
 	def update_tooling_api(self, resource_uri, params):
@@ -107,8 +110,22 @@ class SFDC(object):
 									   headers=headers)
 		except Exception, e:
 			print "[ERROR]: Update tooling API failed"
-			if DEBUG:
-				print "[EXCEPTION]: %s" % str(e)
+			log_exception(e)
+		return resp
+
+	def update_analytics_api(self, resource_id, params):
+		""" Update an object using analytics API """
+		res_uri = self._service_url + '/analytics/reports/' + resource_id
+		headers = self._get_headers()
+		headers['Content-Type'] = 'application/json'
+		try:
+			resp = self._session.request('PATCH', 
+									 	 res_uri, 
+									 	 headers=headers, 
+									 	 data=params)
+		except Exception, e:
+			print "[ERROR]: Update Analytics API failed"
+			log_exception(e)
 			return None
 		return resp
 
@@ -118,7 +135,6 @@ class SFDC(object):
 			result = self._sf.query(q)
 		except Exception, e:
 			print "[ERROR]: run_soql failed"
-			if DEBUG:
-				print "[EXCEPTION]: %s" % str(e)
+			log_exception(e)
 			return None
 		return result
