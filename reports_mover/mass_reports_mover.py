@@ -28,9 +28,20 @@ def move_reports(input_file, folder_name):
 		"reportMetadata": {
 			"folderId": folder_id
 		}})
+	failed_reports = 0
 	for report_id in report_ids:
-		if 200 != sf.update_analytics_api(report_id, params):
-			print "[FAILED]: Report %s" % report_id
+		resp = sf.update_analytics_api(report_id, params)
+		if resp is not None and resp.status_code != 200:
+			try:
+				json_resp = json.loads(resp.text)
+				reason = json_resp[0].get('errorCode', 'N/A')
+			except:
+				reason = 'N/A'
+			print "[FAILED]: Report %s, Reason: %s" % (report_id, reason)
+			failed_reports += 1
+
+	print ("[DONE] Failed to move %d reports out of %d" 
+		   % (failed_reports, len(report_ids)))
 
 if __name__ == "__main__":
 	cli_parser = argparse.ArgumentParser(description="Mass Reports Mover")
