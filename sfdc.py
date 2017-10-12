@@ -132,7 +132,7 @@ class SFDC(object):
 	def run_soql(self, q):
 		""" Runs a SOQL query """
 		try:
-			result = self._sf.query(q)
+			result = self._sf.query_all(q)
 		except Exception, e:
 			print "[ERROR]: run_soql failed"
 			log_exception(e)
