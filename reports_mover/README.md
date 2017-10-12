@@ -1,3 +1,5 @@
+Overview and business case: https://sf9to5.com/2017/10/11/salesforce-mass-report-mover/
+
 # get_reports.py
 
 A simple command line utility to dump the Name, ID, Folder Name and Last Run Date of Salesforce Reports 
