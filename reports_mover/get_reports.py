@@ -36,9 +36,10 @@ def dump_reports(soql):
 	report_ids = []
 	lines = []
 	for record in results.get('records'):
-		line = "%s,%s,%s" % (record.get('Id'), 
-							 record.get('Name'), 
-							 record.get('LastRunDate'))
+		line = "%s,%s,%s,%s" % (record.get('Id'),
+								record.get('FolderName'), 
+							 	record.get('Name'), 
+							 	record.get('LastRunDate'))
 		lines.append(line)
 		report_ids.append(record.get('Id'))
 
@@ -53,7 +54,7 @@ def main():
 	if criteria == SEARCH_BY_FOLDER:
 		folder_name = raw_input("Enter folder name: ")
 		print "[INFO]: Searching for reports in folder %s" % folder_name
-		soql = ("SELECT Id, Name, LastRunDate FROM Report "
+		soql = ("SELECT Id, Name, FolderName, LastRunDate FROM Report "
 				"WHERE IsDeleted = FALSE AND "
 				"FolderName = '%s'" % folder_name)
 	elif criteria == SEARCH_BY_NOT_RUN:
@@ -61,7 +62,7 @@ def main():
 		print ("[INFO]: Searching for reports that were NOT "
 			   "executed in the last %d days" % ndays)
 		# if report was never executed, the LastRunDate will be null
-		soql = ("SELECT Id, Name, LastRunDate FROM Report "
+		soql = ("SELECT Id, Name, FolderName, LastRunDate FROM Report "
 				"WHERE IsDeleted = FALSE AND "
 				"((LastRunDate = null) OR "
 				"(LastRunDate < LAST_N_DAYS:%d))" % ndays)
@@ -69,7 +70,7 @@ def main():
 		ndays = int(raw_input("Enter number of days: "))
 		print ("[INFO]: Searching for reports that were "
 			   "executed in the last %d days" % ndays)
-		soql = ("SELECT Id, Name, LastRunDate FROM Report "
+		soql = ("SELECT Id, Name, FolderName, LastRunDate FROM Report "
 				"WHERE IsDeleted = FALSE AND "
 				"LastRunDate >= LAST_N_DAYS:%d" % ndays)
 	else:
